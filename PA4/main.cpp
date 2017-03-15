@@ -19,13 +19,20 @@ using namespace std;
 int randNumGenerator();
 void textfileBuilder(int values);
 int* arrayBuilder(int values, int* arrayPtr);
-void selectionSort(int* arrayPtr, int values); 
-int partition(int *arrayPtr, const int left, const int right);
-void quicksort(int* arrayPtr, const int left, const int right);
+
+void selectionSort(int* arrayPtr, int values, int &swaps, int &compares); 
+int partition(int *arrayPtr, const int left, const int right,int &swaps, int &compares );
+void quicksort(int* arrayPtr, const int left, const int right, int &swaps, int &compares);
+void radixsort(int* arrayPtr, int values,int &swaps, int &compares);
+int getMax(int* arrayPtr, int values,int &swaps, int &compares);
+void countSort(int* arrayPtr, int values, int exp,int &swaps, int &compares);
 
 
 int main()
 {	int values = 1;
+	int compares = 0;
+	int swaps = 0;
+    clock_t t;
 
 	cout << "Choose random list size of 1K, 10K, or 100K." << endl << "Enter either '1', '10', or '100': ";
 	cin >> values;
@@ -34,41 +41,54 @@ int main()
 	//dynamically declare an array to store info from data.txt by use of pointer
 	int* arrayPtr = new int[values];
 
-	//build data.txt and fill array based on input file
+	
 	textfileBuilder(values);
-	arrayPtr = arrayBuilder(values, arrayPtr);
 
-						//*****TESTING PURPOSES ONLY*****
-						//print the first 5 randomly generated numbers in the array
+    cout << endl << "*****Runs Each Sort 10 Times and Calculates Average Time, Comparisons, and Swaps*****" << endl << endl << endl;
 
-						//Testing functions:randNumGenerator, textfileBuilder, and arrayBuilder
-	// for (int i = 0; i < 5; ++i)
-	// {
-	// 	cout << *(arrayPtr + i) << endl;
-	// }
-						//***** END OF TESTING*****
 
-						//*****TESTING PURPOSES ONLY*****
-						//test selection sort
-						//print sorted list in terminal
+    t = clock();
+    for (int i = 0; i < 10; ++i)
+    {
+    arrayPtr = arrayBuilder(values, arrayPtr);
+    selectionSort(arrayPtr, values, swaps, compares);
+    }
 
-	// selectionSort(arrayPtr, values);
-	// for (int i = 0; i < values; ++i)
-	// {
-	// 	cout << *(arrayPtr + i) << endl;
-	// }
-						//***** END OF TESTING*****
+	t = ((clock() - t)/10);
+	cout << "Selection Sort Average Swaps: " << swaps/10 << endl;
+	cout << "Selection Sort Average Comparisons: " << compares/10 << endl;
+    cout << "Selction Sort Average Time: " << (float) t/CLOCKS_PER_SEC << endl << endl;
+    compares = 0;
+    swaps = 0;
 
-						//*****TESTING PURPOSES ONLY*****
-						//test quicksort
-						//print sorted list in terminal
-	quicksort(arrayPtr, 0, values - 1);
 
-	for ( int i = 0; i < values; ++i)
-	{
-		cout << *(arrayPtr + i) << endl;
-	}
-						//***** END OF TESTING*****
+    t = clock();
+    for (int i = 0; i < 10; ++i)
+    {
+        arrayPtr = arrayBuilder(values, arrayPtr);
+        quicksort(arrayPtr, 0, values - 1, swaps, compares);
+    }
+
+    t = ((clock() - t)/10);
+	cout << "Quicksort Average Swaps: " << swaps/10 << endl;
+	cout << "Quicksort Average Comparisons: " << compares/10 << endl;
+    cout << "Quicksort Average Time: " << (float) t/CLOCKS_PER_SEC << endl << endl;
+    compares = 0;
+    swaps = 0;
+
+    t = clock();
+    for (int i = 0; i < 10; ++i)
+    {
+        arrayPtr = arrayBuilder(values, arrayPtr);
+        radixsort(arrayPtr, values, swaps, compares);
+    }
+
+	
+    t = ((clock() - t)/10);
+	cout << "Radixsort Average Swaps: " << swaps/10 << endl;
+	cout << "Radixsort Average Comparisons: " << compares/10 << endl;
+    cout << "Radixsort Average Time: " << (float) t/CLOCKS_PER_SEC << endl << endl;
+
 	return 0;
 }
 
@@ -115,7 +135,7 @@ int* arrayBuilder(int values, int* arrayPtr)
 	return arrayPtr;
 }
 
-void selectionSort(int* arrayPtr, int values) 
+void selectionSort(int* arrayPtr, int values, int &swaps, int &compares) 
 {
 	int pos_min, temp;
 
@@ -127,56 +147,122 @@ void selectionSort(int* arrayPtr, int values)
 			if (*(arrayPtr + j) < *(arrayPtr + pos_min))
 			{
 				pos_min = j;
+				compares++;
 			}
 		}
 
 			if (pos_min != i)
 			{
 				swap(*(arrayPtr + i), *(arrayPtr + pos_min));
+				swaps++;
 			}
 		
 	}
 }
 
-int partition(int* arrayPtr, const int left, const int right) 
+int partition(int* arrayPtr, const int left, const int right, int &swaps, int &compares) 
 {
     const int mid = left + (right - left) / 2;
     const int pivot = *(arrayPtr + mid);
 
     // move the mid point value to the front.
     swap(*(arrayPtr + mid),*(arrayPtr + left));
+    swaps++;
     int i = left + 1;
     int j = right;
 
     while (i <= j) {
         while(i <= j && *(arrayPtr + i) <= pivot) 
         {
+        	compares++;
             i++;
         }
 
         while(i <= j && *(arrayPtr + j) > pivot) 
         {
+        	compares++;
             j--;
         }
 
         if (i < j) {
             swap(*(arrayPtr + i), *(arrayPtr + j));
+            swaps++;
+            compares++;
         }
     }
     	swap(*(arrayPtr + i - 1),*(arrayPtr + left));
+    	swaps++;
     return i - 1;
 }
 
-void quicksort(int* arrayPtr, const int left, const int right)
+void quicksort(int* arrayPtr, const int left, const int right, int &swaps, int &compares)
 {
 
     if (left >= right) {
+    	compares++;
         return;
     }
 
 
-    int part = partition(arrayPtr, left, right);
+    int part = partition(arrayPtr, left, right, swaps, compares);
 
-    quicksort(arrayPtr, left, part - 1);
-    quicksort(arrayPtr, part + 1, right);
+    quicksort(arrayPtr, left, part - 1, swaps, compares);
+    quicksort(arrayPtr, part + 1, right, swaps, compares);
+}
+
+// A utility function to get maximum value in array
+int getMax(int* arrayPtr, int values, int &swaps, int &compares)
+{
+    int mx = *arrayPtr;
+    for (int i = 1; i < values; i++)
+    {
+        if (*(arrayPtr + i) > mx)
+        {
+            mx = *(arrayPtr + i);
+        }
+    }
+    return mx;
+}
+ 
+// A function to do counting sort of array according to
+// the digit represented by exp.
+void countSort(int* arrayPtr, int values, int exp, int &swaps, int &compares)
+{
+    int output[values]; // output array
+    int i, count[10] = {0};
+ 
+    // Store count of occurrences in count[]
+    for (i = 0; i < values; i++)
+        count[ (*(arrayPtr + i)/exp)%10 ]++;
+ 
+    // Change count[i] so that count[i] now contains actual
+    //  position of this digit in output[]
+    for (i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+ 
+    // Build the output array
+    for (i = values - 1; i >= 0; i--)
+    {
+        output[count[ (*(arrayPtr + i)/exp)%10 ] - 1] = *(arrayPtr + i);
+        count[ (*(arrayPtr + i)/exp)%10 ]--;
+    }
+ 
+    // Copy the output array to array, so that array now
+    // contains sorted numbers according to current digit
+    for (i = 0; i < values; i++)
+        *(arrayPtr + i) = output[i];
+}
+ 
+// The main function to that sorts array of size values using 
+// Radix Sort
+void radixsort(int* arrayPtr, int values, int &swaps, int &compares)
+{
+    // Find the maximum number to know number of digits
+    int m = getMax(arrayPtr, values, swaps, compares);
+ 
+    // Do counting sort for every digit. Note that instead
+    // of passing digit number, exp is passed. exp is 10^i
+    // where i is current digit number
+    for (int exp = 1; m/exp > 0; exp *= 10)
+        countSort(arrayPtr, values, exp, swaps, compares);
 }
