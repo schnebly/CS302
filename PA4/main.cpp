@@ -34,6 +34,7 @@ int main()
 	int swaps = 0;
     clock_t t;
 
+    cout << endl;
 	cout << "Choose random list size of 1K, 10K, or 100K." << endl << "Enter either '1', '10', or '100': ";
 	cin >> values;
 	values *= 1000; //creates an integer 1000, 10000 or 100000 based off input
@@ -44,7 +45,7 @@ int main()
 	
 	textfileBuilder(values);
 
-    cout << endl << "*****Runs Each Sort 10 Times and Calculates Average Time, Comparisons, and Swaps*****" << endl << endl << endl;
+    cout << endl << "*****Runs Each Sort 10 Times and Calculates Average Time, Comparisons, and Swaps For " << values << " Values"<<  "*****" << endl << endl << endl;
 
 
     t = clock();
@@ -88,6 +89,22 @@ int main()
 	cout << "Radixsort Average Swaps: " << swaps/10 << endl;
 	cout << "Radixsort Average Comparisons: " << compares/10 << endl;
     cout << "Radixsort Average Time: " << (float) t/CLOCKS_PER_SEC << endl << endl;
+
+    t = clock();
+    selectionSort(arrayPtr, values, swaps, compares);
+    t = (clock() - t);
+    cout << "Selection sort realized the array was already sorted in " << (double) t/CLOCKS_PER_SEC << " seconds." << endl;
+
+    t = clock();
+    quicksort(arrayPtr, 0, values - 1, swaps, compares);
+    t = (clock() - t);
+    cout << "Quicksort realized the array was already sorted in " << (double) t/CLOCKS_PER_SEC << " seconds." << endl;
+
+    t = clock();
+    radixsort(arrayPtr, values, swaps, compares);
+    t = (clock() - t);
+    cout << "Radixsort realized the array was already sorted in " << (double) t/CLOCKS_PER_SEC << " seconds." << endl;
+    cout << endl;
 
 	return 0;
 }
