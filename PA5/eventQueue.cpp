@@ -70,9 +70,11 @@ bool eventQueue::isEmpty() const
 bool eventQueue::push(int pTime, char AD, int num, int trans)
 {
 	eventNode* temp = new eventNode(pTime, AD, num, trans);
+	
 
 	if (this->isEmpty() == 1)
 	{
+		
 
 		front = temp;
 		rear = front;
@@ -83,8 +85,10 @@ bool eventQueue::push(int pTime, char AD, int num, int trans)
 		return true;
 	}
 
-	else if (temp->priorityTime > front->priorityTime)
+
+	else if (temp->priorityTime < front->priorityTime)
 	{
+		
 		temp->next = front;
 		front = temp;
 
@@ -96,20 +100,26 @@ bool eventQueue::push(int pTime, char AD, int num, int trans)
 
 	else
 	{
+		
 		eventNode* ptrL = front;
-
-		while(ptrL->next->priorityTime < temp->priorityTime)
+		
+		if ((ptrL->next) != NULL)
 		{
-			ptrL = ptrL->next;
+			while(ptrL->next != NULL && (ptrL->next->priorityTime < temp->priorityTime))
+			{
+				
+				ptrL = ptrL->next;
+			}
 		}
-
+		
 		temp->next = ptrL->next;
-
+		
 		ptrL->next = temp;
-
+		
 		temp = NULL;
-
+	
 		delete temp;
+		
 		return true;
 	}
 
@@ -152,3 +162,20 @@ int eventQueue::getFrontpTime()
 {
 	return front->priorityTime;
 }
+
+void eventQueue::printNodes()
+{
+	eventNode* temp = front;	
+	if (this->isEmpty() == 0)
+	{
+	
+		while(temp->next != NULL )									
+		{														
+	 		cout << temp->priorityTime << endl;	
+	 		temp = temp->next;						
+		}
+
+		cout << temp->priorityTime << endl;
+	}
+	return;
+}														

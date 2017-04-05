@@ -33,6 +33,7 @@ class eventQueue{
 				char getFrontADtype();//
 				int getFrontNum();
 				int getFrontpTime();
+				void printNodes();
 
 				
 		private:
