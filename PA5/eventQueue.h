@@ -7,11 +7,10 @@ class eventQueue;
 
 struct eventNode{
 		
-		eventNode(int,char,int,int);
+		eventNode(int,char,int);
 	
 		int priorityTime;
 		char ADtype;
-		int customerNumber;
 		int transactionTime;
 
 		eventNode* next;
@@ -24,14 +23,13 @@ class eventQueue{
 				eventQueue();
   				~eventQueue();
 
-				bool push(int pTime, char AD, int num, int trans);
+				bool push(int pTime, char AD, int trans);
 				bool pop();
 				
 				bool isEmpty() const;
 				bool clear();
 				int getFrontTransTime();
 				char getFrontADtype();
-				int getFrontNum();
 				int getFrontpTime();
 				void printNodes();
 

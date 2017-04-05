@@ -6,15 +6,15 @@
 
 #include "eventQueue.h"
 
-#define MAX_EVENTS 10;
+#define MAX_EVENTS 100
 
 using namespace std;
 
-eventNode::eventNode(int p, char AD, int num, int trans)
+eventNode::eventNode(int p, char AD, int trans)
 {
 	priorityTime = p;
 	ADtype = AD;
-	customerNumber = num;
+	
 	transactionTime = trans;
 
 	next = NULL;
@@ -69,9 +69,9 @@ bool eventQueue::isEmpty() const
 	return false;
 }
 
-bool eventQueue::push(int pTime, char AD, int num, int trans)
+bool eventQueue::push(int pTime, char AD, int trans)
 {
-	eventNode* temp = new eventNode(pTime, AD, num, trans);
+	eventNode* temp = new eventNode(pTime, AD, trans);
 	
 
 	if (this->isEmpty() == 1)
@@ -155,10 +155,7 @@ char eventQueue::getFrontADtype()
 	return front->ADtype;
 }
 
-int eventQueue::getFrontNum()
-{
-	return front->customerNumber;
-}
+
 
 int eventQueue::getFrontpTime()
 {
@@ -170,15 +167,15 @@ void eventQueue::printNodes()
 	eventNode* temp = front;	
 	if (this->isEmpty() == 0)
 	{
-		cout << "-----Event Queue (by Priority Times)------" << endl;
+		cout << "-----Event Queue ( Priority Times + Transaction Times )------" << endl;
 	
 		while(temp->next != NULL )									
 		{														
-	 		cout << temp->priorityTime << endl;	
+	 		cout << temp->priorityTime << "		"<< temp->transactionTime << endl;	
 	 		temp = temp->next;						
 		}
 
-		cout << temp->priorityTime << endl;
+		cout << temp->priorityTime << "		"<< temp->transactionTime << endl;
 	}
 	return;
 }
@@ -194,11 +191,11 @@ void eventQueue::loadEventQueue()
 
 	fin.open("input.txt");
 
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < MAX_EVENTS; i++)
 	{
 		fin >> tempPTime;
 		fin >> tempTrans;
-		this->push(tempPTime, 'A', i+1, tempTrans);
+		this->push(tempPTime, 'A', tempTrans);
 	}
 
 	fin.close();
