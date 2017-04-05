@@ -6,6 +6,8 @@
 
 #include "eventQueue.h"
 
+#define MAX_EVENTS 10;
+
 using namespace std;
 
 eventNode::eventNode(int p, char AD, int num, int trans)
@@ -168,6 +170,7 @@ void eventQueue::printNodes()
 	eventNode* temp = front;	
 	if (this->isEmpty() == 0)
 	{
+		cout << "-----Event Queue (by Priority Times)------" << endl;
 	
 		while(temp->next != NULL )									
 		{														
@@ -178,4 +181,25 @@ void eventQueue::printNodes()
 		cout << temp->priorityTime << endl;
 	}
 	return;
+}
+
+void eventQueue::loadEventQueue()
+{
+	ifstream fin;
+	int tempPTime;
+	int tempTrans;
+	int i = 0;
+
+	fin.clear();
+
+	fin.open("input.txt");
+
+	for (i = 0; i < 10; i++)
+	{
+		fin >> tempPTime;
+		fin >> tempTrans;
+		this->push(tempPTime, 'A', i+1, tempTrans);
+	}
+
+	fin.close();
 }														

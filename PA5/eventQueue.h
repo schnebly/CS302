@@ -7,7 +7,7 @@ class eventQueue;
 
 struct eventNode{
 		
-		eventNode(int,char,int,int);//
+		eventNode(int,char,int,int);
 	
 		int priorityTime;
 		char ADtype;
@@ -21,19 +21,21 @@ struct eventNode{
 
 class eventQueue{
 		public:
-				eventQueue();//
-  				~eventQueue();//
+				eventQueue();
+  				~eventQueue();
 
-				bool push(int pTime, char AD, int num, int trans);//
-				bool pop();//
+				bool push(int pTime, char AD, int num, int trans);
+				bool pop();
 				
-				bool isEmpty() const;//
-				bool clear();//
-				int getFrontTransTime();//
-				char getFrontADtype();//
+				bool isEmpty() const;
+				bool clear();
+				int getFrontTransTime();
+				char getFrontADtype();
 				int getFrontNum();
 				int getFrontpTime();
 				void printNodes();
+
+				void loadEventQueue();
 
 				
 		private:
