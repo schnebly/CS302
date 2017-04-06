@@ -5,14 +5,15 @@ using namespace std;
 
 class lineQueue;
 
-class lineNode{
-	private:
-		lineNode(string, lineNode*);
+struct lineNode{
+		lineNode(int, int,int, lineNode*);
 
-		string name;
+		int customerNum;
+		int tTime;
+		int arrivalTime;
 		lineNode* next;
 
-		friend class lineQueue;
+		
 };
 
 class lineQueue{
@@ -20,9 +21,11 @@ class lineQueue{
 				lineQueue();
   				~lineQueue();
 
-				bool enqueue(string);
+				bool enqueue(int, int, int);
 				bool dequeue();
-				string getFront();
+				int getFronttTime();
+				int getFrontNum();
+				int getFrontpTime();
 				bool isEmpty() const;
 				bool clear();
 

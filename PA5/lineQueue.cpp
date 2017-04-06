@@ -9,13 +9,17 @@
 
 using namespace std;
 
-lineNode::lineNode(string data, lineNode* inext)
+lineNode::lineNode(int data,int iTime, int ipTime ,lineNode* inext)
 {
 	cout << "Node Default Constructor" << endl;
 
-	name = data;
+	customerNum = data;
+
+	tTime = iTime;
 
 	next = inext;
+
+	arrivalTime = ipTime;
 }
 
 lineQueue::lineQueue()
@@ -63,21 +67,31 @@ bool lineQueue::isEmpty() const
 	return false;
 }
 
-string lineQueue::getFront()
+int lineQueue::getFrontNum()
 {
-	return front->name;
+	return front->customerNum;
 }
 
-bool lineQueue::enqueue(string data)
+int lineQueue::getFronttTime()
+{
+	return front->tTime;
+}
+
+int lineQueue::getFrontpTime()
+{
+	return front->arrivalTime;
+}
+
+bool lineQueue::enqueue(int data, int trans, int prior)
 {
 	if (rear == NULL)
 	{
-		rear = new lineNode(data, NULL);
+		rear = new lineNode(data,trans,prior, NULL);
 		front = rear;
 		return true;
 	}
 	else
-		rear->next = new lineNode(data, NULL);
+		rear->next = new lineNode(data,trans, prior, NULL);
 		rear = rear->next;
 		return true;
 }
