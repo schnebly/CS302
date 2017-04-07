@@ -21,8 +21,8 @@ class lineQueue{
 				lineQueue();
   				~lineQueue();
 
-				bool enqueue(int, int, int);
-				bool dequeue();
+				bool push(int, int, int);
+				bool pop();
 				int getFronttTime();
 				int getFrontNum();
 				int getFrontpTime();

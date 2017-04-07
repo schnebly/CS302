@@ -11,7 +11,7 @@ using namespace std;
 
 lineNode::lineNode(int data,int iTime, int ipTime ,lineNode* inext)
 {
-	cout << "Node Default Constructor" << endl;
+	
 
 	customerNum = data;
 
@@ -24,7 +24,7 @@ lineNode::lineNode(int data,int iTime, int ipTime ,lineNode* inext)
 
 lineQueue::lineQueue()
 {
-	cout << "lineQueue Default Constructor" << endl;
+	
 
 	front = NULL;
 	rear = NULL;
@@ -32,7 +32,6 @@ lineQueue::lineQueue()
 
 lineQueue::~lineQueue()
 {
-	cout << "lineQueue Destructor" << endl;
 	//calls clear function to delete the queue and clear dynamic memory
 	clear();
 }
@@ -82,7 +81,7 @@ int lineQueue::getFrontpTime()
 	return front->arrivalTime;
 }
 
-bool lineQueue::enqueue(int data, int trans, int prior)
+bool lineQueue::push(int data, int trans, int prior)
 {
 	if (rear == NULL)
 	{
@@ -96,7 +95,7 @@ bool lineQueue::enqueue(int data, int trans, int prior)
 		return true;
 }
 
-bool lineQueue::dequeue()
+bool lineQueue::pop()
 {
 	if (rear == NULL)
 	{
