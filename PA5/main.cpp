@@ -24,7 +24,7 @@ void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tT
 int main()
 {
 	createInputFile();
-	cout << "test" << endl;
+	
 	simulate();
 
 	return 0;
@@ -52,15 +52,15 @@ void createInputFile()
 
 void simulate()
 {
-	cout << "test 1" << endl;
+	
 	lineQueue bankLine;//create customer line
 	eventQueue eventPriorityQueue;//create queue of events
 
-	cout << "test 2" << endl;
+	
 	bool tellerAvailable = true;
-	cout << "test 3" << endl;
+	
 	eventPriorityQueue.loadEventQueue();//enq the arrival events into the PQ
-	cout << "test 4" << endl;
+	
 	int i = 0;
 
 
@@ -69,19 +69,21 @@ void simulate()
 	{
 		//get current time
 		int currentTime = eventPriorityQueue.getFrontpTime();
-		cout << "test 5" << endl;
+		
 
 		if(eventPriorityQueue.getFrontADtype() == 'A')
 		{	
-			cout << "test 6" << endl;
+			
 			i++;
 			processArrival(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime(),eventPriorityQueue.getFrontTransTime(),i);
 		}
 		else
-			cout << "test 7" << endl;
+			
 			processDeparture(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime(),eventPriorityQueue.getFrontTransTime(),i);
 	}
-	cout << "test 8" << endl;
+
+	cout << "Simulation Over" << endl;
+	
 }
 
 void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime, int num )
@@ -91,7 +93,7 @@ void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTi
 
 	if (CQ.isEmpty() && TA)
 	{
-		departureTime = pTime + PQ.getFrontTransTime();
+		departureTime = pTime + tTime;
 		PQ.push(departureTime, 'D', 0);
 		TA = false;
 	}
