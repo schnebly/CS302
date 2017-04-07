@@ -111,15 +111,14 @@ void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTi
 
 void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num )
 {
-	cout << "Processing departure event at time: " << pTime << "..." << num << endl;
+	cout << "Processing departure event at time: " << pTime << "..." << endl;
 	int departureTime;
 
 	PQ.pop();
 	if (!CQ.isEmpty())
 	{
+		departureTime = pTime + CQ.getFronttTime();
 		CQ.pop();
-
-		departureTime = pTime + tTime;
 		PQ.push(departureTime, 'D', 0);
 		TA = false;
 	}
