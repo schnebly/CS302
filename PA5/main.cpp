@@ -75,12 +75,16 @@ void simulate()
 		{	
 			
 			i++;
+
+			
+
 			processArrival(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime()
 							,eventPriorityQueue.getFrontTransTime(),i);
 
 
 		}
 		else
+			
 			
 			processDeparture(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime()
 							,eventPriorityQueue.getFrontTransTime(),i);
@@ -93,7 +97,12 @@ void simulate()
 void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime, int num )
 {
 
-	cout << "Processing arrival event at time: " << pTime << "..." << endl;
+	cout << "ARRIVAL TIME: " << pTime << endl
+              << "TRANSACTION TIME: " << tTime << endl
+              << "CUSTOMER QUEUE EMPTY? " << CQ.isEmpty() << endl
+				<< "TELLER AVAILABLE? " << TA << endl << endl;
+
+	
 	PQ.pop();
 	int departureTime;
 
@@ -111,7 +120,10 @@ void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTi
 
 void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num )
 {
-	cout << "Processing departure event at time: " << pTime << "..." << endl;
+	cout << "DEPARTURE TIME: " << pTime<< endl
+              << "TRANSACTION TIME: " << tTime << endl
+              << "CUSTOMER QUEUE EMPTY? " << CQ.isEmpty() << endl
+				<< "TELLER AVAILABLE? " << TA << endl << endl;
 	int departureTime;
 
 	PQ.pop();
