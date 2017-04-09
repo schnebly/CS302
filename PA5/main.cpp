@@ -16,16 +16,20 @@
 using namespace std;
 
 void createInputFile();
-void simulate();
+void simulate1Q1T();
+void simulate1Q3T();
+void simulate3Q3T();
 void processArrival(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num );
-void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num );
+void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num, int wTime, int& totWait );
 
 
 int main()
 {
 	createInputFile();
 	
-	simulate();
+	simulate1Q1T();
+	//simulate1Q3T();
+	//simulate3Q3T();
 
 	return 0;
 
@@ -50,11 +54,14 @@ void createInputFile()
 	fout.close();
 }
 
-void simulate()
+void simulate1Q1T()
 {
+	cout << endl << "----------1Q1T Simulation Begin----------" << endl << endl;
 	
 	lineQueue bankLine;//create customer line
 	eventQueue eventPriorityQueue;//create queue of events
+
+	int totWait = 0;
 
 	
 	bool tellerAvailable = true;
@@ -75,42 +82,46 @@ void simulate()
 		{	
 			
 			i++;
-
-			
-
 			processArrival(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime()
 							,eventPriorityQueue.getFrontTransTime(),i);
 
 
 		}
 		else
-			
-			
 			processDeparture(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime()
-							,eventPriorityQueue.getFrontTransTime(),i);
+							,eventPriorityQueue.getFrontTransTime(),i, eventPriorityQueue.getFrontwaitTime(), totWait);
 	}
 
-	cout << "Simulation Over" << endl;
-	
+	cout << endl << endl << "1Q1T Simulation Over" << endl << endl;
+
+	cout << "----------Statistics---------- " << endl
+		<< "Total number of people processed: " << i << endl
+		<< "Average amount of time spent waiting: " << (double) totWait/MAX_EVENTS << endl << endl;
 }
 
-void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime, int num )
+void simulate1Q3T()
 {
 
-	cout << "ARRIVAL TIME: " << pTime << endl
-              << "TRANSACTION TIME: " << tTime << endl
-              << "CUSTOMER QUEUE EMPTY? " << CQ.isEmpty() << endl
-				<< "TELLER AVAILABLE? " << TA << endl << endl;
+}
+void simulate3Q3T()
+{
 
+}
+
+void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime, int num)
+{
+	cout << "Processing ARRIVAL at time: " << pTime << endl;
 	
 	PQ.pop();
 	int departureTime;
+	int waitTime = 0;
 
 	if (CQ.isEmpty() && TA)
 	{
 		departureTime = pTime + tTime;
-		PQ.push(departureTime, 'D', 0);
+		PQ.push(departureTime, 'D', 0, waitTime);
 		TA = false;
+		waitTime = 0;
 	}
 	else
 	{
@@ -118,22 +129,30 @@ void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTi
 	}
 }
 
-void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num )
+void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num, int wTime, int& totWait)
 {
-	cout << "DEPARTURE TIME: " << pTime<< endl
-              << "TRANSACTION TIME: " << tTime << endl
-              << "CUSTOMER QUEUE EMPTY? " << CQ.isEmpty() << endl
-				<< "TELLER AVAILABLE? " << TA << endl << endl;
+             		
 	int departureTime;
+	int currentTime = pTime;
+	int waitTime = 0;
+
+	totWait += wTime;
 
 	PQ.pop();
 	if (!CQ.isEmpty())
 	{
-		departureTime = pTime + CQ.getFronttTime();
+		departureTime = currentTime + CQ.getFronttTime();
+		waitTime = currentTime - CQ.getFrontpTime();
 		CQ.pop();
-		PQ.push(departureTime, 'D', 0);
+		PQ.push(departureTime, 'D', 0, waitTime);
+
 		TA = false;
+		
 	}
 	else
 		TA = true;
+
+		
+
+	cout << "Processing DEPARTURE at time: " << pTime << "   " << " Customer waited: " << wTime << endl;
 }

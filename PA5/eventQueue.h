@@ -7,11 +7,12 @@ class eventQueue;
 
 struct eventNode{
 		
-		eventNode(int,char,int);
+		eventNode(int,char,int,int);
 	
 		int priorityTime;
 		char ADtype;
 		int transactionTime;
+		int waitTime;
 
 		eventNode* next;
 
@@ -23,7 +24,7 @@ class eventQueue{
 				eventQueue();
   				~eventQueue();
 
-				bool push(int pTime, char AD, int trans);
+				bool push(int pTime, char AD, int trans, int wTime);
 				bool pop();
 				
 				bool isEmpty() const;
@@ -31,6 +32,7 @@ class eventQueue{
 				int getFrontTransTime();
 				char getFrontADtype();
 				int getFrontpTime();
+				int getFrontwaitTime();
 				void printNodes();
 
 				void loadEventQueue();

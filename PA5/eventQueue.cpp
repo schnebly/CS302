@@ -10,10 +10,11 @@
 
 using namespace std;
 
-eventNode::eventNode(int p, char AD, int trans)
+eventNode::eventNode(int p, char AD, int trans, int wTime)
 {
 	priorityTime = p;
 	ADtype = AD;
+	waitTime = wTime;
 	
 	transactionTime = trans;
 
@@ -60,6 +61,11 @@ int eventQueue::getFrontTransTime()
 
 }
 
+int eventQueue::getFrontwaitTime()
+{
+	return front->waitTime;
+}
+
 bool eventQueue::isEmpty() const
 {
 	if (rear == NULL)
@@ -69,9 +75,9 @@ bool eventQueue::isEmpty() const
 	return false;
 }
 
-bool eventQueue::push(int pTime, char AD, int trans)
+bool eventQueue::push(int pTime, char AD, int trans, int wTime)
 {
-	eventNode* temp = new eventNode(pTime, AD, trans);
+	eventNode* temp = new eventNode(pTime, AD, trans, wTime);
 	
 
 	if (this->isEmpty() == 1)
@@ -195,7 +201,7 @@ void eventQueue::loadEventQueue()
 	{
 		fin >> tempPTime;
 		fin >> tempTrans;
-		this->push(tempPTime, 'A', tempTrans);
+		this->push(tempPTime, 'A', tempTrans, 0);
 	}
 
 	fin.close();
