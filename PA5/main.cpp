@@ -20,7 +20,7 @@ void simulate1Q1T();
 void simulate1Q3T();
 void simulate3Q3T();
 void processArrival(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num );
-void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num, int wTime, int& totWait );
+void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num, int wTime, int& totWait, int& max );
 
 
 int main()
@@ -62,6 +62,7 @@ void simulate1Q1T()
 	eventQueue eventPriorityQueue;//create queue of events
 
 	int totWait = 0;
+	int maxWait = 0;
 
 	
 	bool tellerAvailable = true;
@@ -69,6 +70,7 @@ void simulate1Q1T()
 	eventPriorityQueue.loadEventQueue();//enq the arrival events into the PQ
 	
 	int i = 0;
+	int j = 0;
 
 
 	//event loop
@@ -82,14 +84,18 @@ void simulate1Q1T()
 		{	
 			
 			i++;
+			j = 0;
 			processArrival(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime()
 							,eventPriorityQueue.getFrontTransTime(),i);
 
 
 		}
 		else
+		{
+			j++;
 			processDeparture(eventPriorityQueue,bankLine,tellerAvailable,eventPriorityQueue.getFrontpTime()
-							,eventPriorityQueue.getFrontTransTime(),i, eventPriorityQueue.getFrontwaitTime(), totWait);
+							,eventPriorityQueue.getFrontTransTime(),i, eventPriorityQueue.getFrontwaitTime(), totWait, maxWait);
+		}
 	}
 
 	cout << endl << endl << "1Q1T Simulation Over" << endl << endl;
@@ -97,6 +103,12 @@ void simulate1Q1T()
 	cout << "----------Statistics---------- " << endl
 		<< "Total number of people processed: " << i << endl
 		<< "Average amount of time spent waiting: " << (double) totWait/MAX_EVENTS << endl << endl;
+
+	cout << "----------Added 7.b Statistics---------- " << endl
+		<< "Max Wait:  " << maxWait << endl
+		<< "Min Wait: " << 0 << endl
+		<< "Min Line Size: " << 0 << endl
+		<< "Max Line Size: " << j << endl << endl;
 }
 
 void simulate1Q3T()
@@ -129,7 +141,7 @@ void processArrival( eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTi
 	}
 }
 
-void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num, int wTime, int& totWait)
+void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tTime,int num, int wTime, int& totWait, int& max)
 {
              		
 	int departureTime;
@@ -137,6 +149,10 @@ void processDeparture(eventQueue& PQ, lineQueue& CQ, bool& TA, int pTime, int tT
 	int waitTime = 0;
 
 	totWait += wTime;
+	if (wTime > max)
+	{
+		max = wTime;
+	}
 
 	PQ.pop();
 	if (!CQ.isEmpty())
