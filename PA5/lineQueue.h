@@ -28,6 +28,7 @@ class lineQueue{
 				int getFrontpTime();
 				bool isEmpty() const;
 				bool clear();
+				int getLength();
 
 				
 		private:

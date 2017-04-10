@@ -17,9 +17,11 @@ lineNode::lineNode(int data,int iTime, int ipTime ,lineNode* inext)
 
 	tTime = iTime;
 
+	arrivalTime = ipTime;
+
 	next = inext;
 
-	arrivalTime = ipTime;
+	
 }
 
 lineQueue::lineQueue()
@@ -118,4 +120,18 @@ bool lineQueue::pop()
 	}
 
 	return true;
+}
+
+int lineQueue::getLength()
+{
+	lineNode* temp = front;
+	int l = 0;
+
+	while(temp != NULL)
+	{
+		l++;
+		temp = temp->next;
+	}
+
+	return l;
 }
