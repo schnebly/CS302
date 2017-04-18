@@ -6,27 +6,57 @@
 //main driver
 
 #include <iostream>
+#include <fstream>
 
 #include "BinarySearchTree.cpp"
 
 using namespace std;
 
+void createInputFile();
+
+
+
 int main()
 {
-	Node* root = new Node(10);
-	Node* traverse = NULL;
+	createInputFile();
+	cout << "Input file has been generated with 100 values between 1-200..." << endl;
 
-	cout << "Is new node a leaf? " << (*root).isLeaf() << endl;
+	BST tree;
+	
+	ifstream fin;
+	int entry;
 
-	cout << "Creating child nodes... " << endl;
+	fin.open("input.txt");
 
-	root->leftChildPtr = new Node(5, NULL, NULL);
-	root->rightChildPtr = new Node(15);
+	for (int i = 0; i < 100; i++)
+	{
+		fin >> entry;
+		tree.addNode(entry);
+		cout << "#" << i << endl;
+	}
 
-	cout << "Binary tree w/ height 2:" << endl
-		<< "	"<< root->data << endl
-		<< root->leftChildPtr->data 
-		<< "		" << root->rightChildPtr->data << endl;
+	fin.close();
 
+	cout << "Height of tree: " << tree.getHeight() << endl
+		<< "Root of tree: " << tree.getRootData() << endl;
 	return 0;
+}
+
+void createInputFile()
+{
+	ofstream fout;
+
+	fout.clear();
+
+	fout.open("input.txt");
+
+	srand (time(NULL));
+
+
+	for (int i = 0; i < 100; ++i)
+	{
+		fout << rand() % 200 + 1 << endl;
+	}
+
+	fout.close();
 }

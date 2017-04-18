@@ -56,7 +56,7 @@ bool Node::isLeaf()
 BST::BST()
 {
 	root = NULL;
-	root->data = 0;
+
 }
 BST::BST(Node* rootItem)
 {
@@ -67,12 +67,11 @@ BST::BST(Node* rootItem)
 BST::BST(BST& copyTree)
 {
 	//copy in each node from copyTree
+
 }
 BST::~BST()
 {
-	//call the clear function
-
-	//delete the root ptr
+	
 }
 
 bool BST::isEmpty()
@@ -129,13 +128,46 @@ void BST::setRootData(int set)
 
 bool BST::addNode(int entry)
 {
-	Node* current = root;
-	//if (entry is greater than or equal current->data )
-	//{
-	////traverse rightChildPtr subTree for correct position
-	//}
-	//else
-	//traverse leftCHildPtr subTree for correct postition
+	Node* current;
+
+	//add the root if the BST is empty
+	if (root == NULL)
+	{
+		root = new Node(entry);
+		cout << entry << " was added as the root Node" << endl;
+		return true;
+
+	}
+
+	current = root;
+	//traverse the subTrees for correct position
+	while(current->leftChildPtr != NULL && current->rightChildPtr != NULL)
+	{
+		if (entry > current->data)
+		{
+				current = current->rightChildPtr;
+		}
+		else if (entry <= current->data)
+		{
+				current = current->leftChildPtr;
+		}
+	}
+
+	if (entry > current->data)
+	{
+		current->rightChildPtr = new Node(entry);
+		cout << entry << " was added as right child node of " << current->data << endl;
+		return true;
+	}
+	else if (entry <= current->data)
+	{
+		current->leftChildPtr = new Node(entry);
+		cout << entry << " was added as left child node of " << current->data << endl;
+		return true;
+	}
+
+	return false;
+		
 }
 bool BST::removeNode(int target)
 {

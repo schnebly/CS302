@@ -48,8 +48,6 @@ public:
 	bool removeNode(int target);
 
 	void clear();
-
-private:
 	
 	Node* root;
 	
