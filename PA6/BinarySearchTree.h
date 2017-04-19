@@ -47,7 +47,7 @@ public:
 	bool addNode(int entry);
 	bool removeNode(int target);
 
-	void clear();
+	void clear(Node*);
 	
 	Node* root;
 	
